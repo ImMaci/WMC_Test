@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ok</title>
+    <style>
+        form { border: solid gold 5px; }
+    </style>
+</head>
+<body>
+    
+    <form action="" onsubmit="return false">
+        <label for="Sitze">Sitze </label>
+        <input type="text" name="seats" id="seats">
+        <label for="PS">PS </label>
+        <input type="text" name="hp" id="hp">
+        <label for="Typ">Typ </label>
+        <input type="text" name="type" id="type">
+        <input type="submit" name="newCar" id="createCar" value="new Auto" onclick="addCar()">
+    </form>
+    <br>
+    <textarea name="textarea1" id="textarea1" cols="30" rows="10"></textarea>
+    <input type="submit" name="print" id="printCars" onclick="printCars()" value="print Cars">
+
+    <input type="submit" name="display" id="display" onclick="toggletextarea()" value="display">
+
+    <form action="" onsubmit="return false ">
+        <label for="rb1">nach > 100 PS</label>
+        <input type="radio" name="filter" id="bt100hp">
+        <br>
+        <label for="rb2">nach Type Golf</label>
+        <input type="radio" name="filter" id="isGolf">
+        <input type="submit" name="filter" id="filter" onclick="filterCars()" value="Filtern">
+        <br>
+        <textarea name="filteroutput" id="filteroutput" cols="30" rows="10"></textarea>
+    </form>
+
+    <script>
+        const Obstsalat = ["Bananen", "Birnen", "Apfel", "Kirsche", "Erdbeere"];
+        Obstsalat.sort();
+        console.log(Obstsalat.filter(e => e.charAt(0) == "B"));
+
+        class Fahrzeuge {
+            constructor(Sitze,PS,Type) {
+                this.Sitze = Sitze;
+                this.PS = PS;
+                this.Type = Type;
+            }
+            toString() {
+                return "Sitze: " + this.Sitze + " PS: " + this.PS + " Type: " + this.Type + "\n";
+            }
+
+            erhoeheLeistungsWert(wert, plusMinus) {
+                if(plusMinus == "+") {
+                    this.PS += wert;
+                } else if(plusMinus == "-") {
+                    this.PS -= wert;
+                }
+            }
+        }
+
+        const Autos = [new Fahrzeuge(5,90,"Golf"),new Fahrzeuge(2,120,"Miata"), new Fahrzeuge(7,150,"Alhambra")];
+
+        const EAutos = [new Fahrzeuge(4,200,"Tesla"), new Fahrzeuge(7,115,"Sharan")];
+
+        const allCars = Autos.concat(EAutos);
+        console.log(allCars);
+
+        function addCar() {
+            const sitz = parseInt(document.getElementById("seats").value);
+            const pferde = parseInt(document.getElementById("hp").value);
+            const model = document.getElementById("type").value;
+
+            Autos.push(new Fahrzeuge(sitz,pferde,model));
+       }
+
+       function printCars() {
+            const ta1 = document.getElementById("textarea1");
+            let text = "";
+            Autos.forEach(element => {
+                text+=element.toString();
+            });
+            ta1.value = text;
+       }
+
+       function toggletextarea() {
+            const ta1 = document.getElementById("textarea1");
+            if(ta1.style.display == "none") {
+                ta1.style.display = "block";
+            } else {
+                ta1.style.display = "none";
+            }
+       }
+
+       function filterCars() {
+            let selectedRadio1 = document.getElementById("bt100hp");
+            let selectedRadio2 = document.getElementById("isGolf");
+            const ta2 = document.getElementById("filteroutput");
+            let text = "";
+            let filteredCars = [];
+
+
+
+            if(selectedRadio1.checked) {
+                Autos.filter(e => {
+                    if(e.PS > 100) {
+                        filteredCars.push(e);
+                    }
+                });
+                // for(let i=0; i < Autos.length; i++) {
+                //     if(Autos[i].PS > 100) {
+                //         filteredCars.push(Autos[i]);
+                //     }
+                // }
+            } else if (selectedRadio2.checked) {
+                Autos.filter(e => {
+                    if(e.Type==="Golf") {
+                        filteredCars.push(e);
+                    }
+                });
+                // for(let i=0; i < Autos.length; i++) {
+                //     if(Autos[i].Type === "Golf") {
+                //         filteredCars.push(Autos[i]);
+                //     }
+                // }
+            }
+
+            filteredCars.forEach(element => {
+                text += element.toString();
+            });
+            ta2.value = text;
+        }
+    </script>
+</body>
+</html>
